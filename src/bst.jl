@@ -19,12 +19,13 @@ abstract type AbstractBinaryTree{K, V} end
 abstract type AbstractNode{K, V} end
 abstract type AbstractBST{K, V} <: AbstractBinaryTree{K, V} end
 
-Base.isless(n1::T, n2::T) where {T <: AbstractNode} = Base.isless(_k(n1), _k(n2))
-Base.isless(n::AbstractNode{K, V}, k::K) where {K, V} = isless(_k(n), k)
-Base.isless(k::K, n::AbstractNode{K, V}) where {K, V} = isless(k, _k(n))
+Base.isless(n1::AbstractNode, n2::AbstractNode) = Base.isless(_k(n1), _k(n2))
+Base.isless(n::AbstractNode, k::K) where K = Base.isless(_k(n), k)
+Base.isless(k::K, n::AbstractNode) where K = Base.isless(k, _k(n))
+Base.isless(::AbstractNode, ::Missing) = Base.isless(_k(n), missing)
+Base.isless(::Missing, ::AbstractNode) = Base.isless(missing, _k(n))
+
 # For abstract types compare with missing to remove ambiguity
-Base.isless(n::AbstractNode, ::Missing) = missing
-Base.isless(::Missing, n::AbstractNode) = missing
 
 _k(n::AbstractNode) = n.k
 _v(n::AbstractNode) = n.v
